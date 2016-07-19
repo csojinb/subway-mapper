@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Hook script that compiles elm files and pushes whenever master is pushed.
+#
+# This hook is called with the following parameters:
+#
+# $1 -- Name of the remote to which the push is being done
+# $2 -- URL to which the push is being done
+#
+# Symbolic link at .git/hooks/pre-push, but saved here so it can be
+# source-controlled
+
+remote="$1"
+
+if [[ `git rev-parse --abbrev-ref HEAD` == "master" && "$remote" == "upstream" ]]; then
+   ./publish.sh
+fi
