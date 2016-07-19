@@ -34,7 +34,7 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
+    div [ wrapper ]
         [ div [] [ Html.text <| padString "Add or remove bullseyes:" 2
                  , button [ onClick Remove ] [ Html.text "-" ]
                  , Html.text <| padString (toString model.count) 2
@@ -45,8 +45,15 @@ view model =
                          , onInput (toIntWithDefault 100 >> ChangeSize)
                          ] []
                  ]
-        , div [] [ drawBullseyes model ]
+        , div [ wrapper ] [ drawBullseyes model ]
         ]
+
+wrapper : Html.Attribute msg
+wrapper =
+    HA.style
+        [ ( "height", "100%" )
+        , ( "width", "100%" )
+        , ( "display", "inline-block" ) ]
 
 padString : String -> Int -> String
 padString s n = (String.repeat n " ") ++ s ++ (String.repeat n " ")
@@ -66,7 +73,8 @@ drawBullseyes model =
                       , SA.height (toString size)
                       , SA.xlinkHref <| ref name ] []
     in
-        svg [] [ defs [] [ element ]
+        svg [ SA.width "100%", SA.height "100%" ]
+            [ defs [] [ element ]
                , g [] <| List.map place [1..count]
                ]
 
@@ -89,6 +97,3 @@ bullseyeRing x y r =
 
 ref : String -> String
 ref s = "#" ++ s
-
-
-
